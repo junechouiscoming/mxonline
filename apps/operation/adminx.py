@@ -14,25 +14,25 @@ class UserAskAdmin(object):
 
 class CourseCommentsAdmin(object):
     list_display = ['user', 'course', 'comments', 'add_time']
-    search_fields = ['user', 'course', 'comment']
+    search_fields = ['course', 'comment']
     list_filter = ['user', 'course__name', 'comments', 'add_time']
 
 
 class UserFavoriteAdmin(object):
     list_display = ['user', 'fav_id', 'fav_type', 'add_time']
-    search_fields = ['user', 'fav_id', 'fav_type']
+    search_fields = ['fav_id', 'fav_type']
     list_filter = ['user', 'fav_id', 'fav_type', 'add_time']
 
 
 class UserMessageAdmin(object):
     list_display = ['user', 'message', 'has_read', 'add_time']
-    search_fields = ['user', 'message', 'has_read']
+    search_fields = ['message', 'has_read']
     list_filter = ['user', 'message', 'has_read', 'add_time']
 
 
 class UserCourseAdmin(object):
     list_display = ['user', 'course', 'add_time']
-    search_fields = ['user', 'course']
+    search_fields = ['course']
     list_filter = ['user', 'course', 'add_time']
 
 
