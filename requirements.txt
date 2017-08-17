@@ -1,0 +1,8 @@
+django==1.9
+django-crispy-forms==1.6.1
+django-formtools==2.0
+django-pure-pagination==0.3.0
+django-simple-captcha==0.5.5
+future==0.16.0
+httplib2==0.10.3
+pymysql==0.7.11

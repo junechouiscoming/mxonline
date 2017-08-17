@@ -20,6 +20,7 @@ class Course(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name=u'点击数')
     fav_nums = models.IntegerField(default=0, verbose_name=u'收藏数')
     category = models.CharField(default=u'后端开发', max_length=20, verbose_name=u'课程类别')
+    tag = models.CharField(default='', max_length=20, verbose_name=u'课程标签')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
