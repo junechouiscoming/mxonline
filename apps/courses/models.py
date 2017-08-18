@@ -5,7 +5,7 @@ from datetime import datetime
 
 from django.db import models
 
-from organization.models import CourseOrg
+from organization.models import CourseOrg, Teacher
 
 
 class Course(models.Model):
@@ -21,6 +21,9 @@ class Course(models.Model):
     fav_nums = models.IntegerField(default=0, verbose_name=u'收藏数')
     category = models.CharField(default=u'后端开发', max_length=20, verbose_name=u'课程类别')
     tag = models.CharField(default='', max_length=20, verbose_name=u'课程标签')
+    teacher = models.ForeignKey(Teacher, null=True, blank=True, verbose_name=u'授课讲师')
+    need_know = models.CharField(default='', max_length=300, verbose_name=u'课程须知')
+    teacher_told_you = models.CharField(default='', max_length=300, verbose_name=u'老师告诉你')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
@@ -31,9 +34,15 @@ class Course(models.Model):
     def get_chapter_nums(self):
         return self.lesson_set.all().count()
 
+    # 获取课程所有章节
+    def get_chapter(self):
+        return self.lesson_set.all()
+
+
     # 获取课程学习人
     def get_learn_users(self):
         return self.usercourse_set.all()[:5]
+
 
     def __str__(self):
         return '{0}'.format(self.name)
@@ -48,6 +57,10 @@ class Lesson(models.Model):
         verbose_name = u'章节'
         verbose_name_plural = verbose_name
 
+    # 获取章节所有视频
+    def get_video(self):
+        return self.video_set.all()
+
     def __str__(self):
         return '{0}'.format(self.name)
 
@@ -55,6 +68,7 @@ class Lesson(models.Model):
 class Video(models.Model):
     lesson = models.ForeignKey(Lesson, verbose_name=u'章节')
     name = models.CharField(max_length=100, verbose_name=u'视频名')
+    url = models.URLField(default='', verbose_name=u'视频地址')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
