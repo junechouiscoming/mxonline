@@ -4,6 +4,7 @@
 from datetime import datetime
 
 from django.db import models
+from DjangoUeditor.models import UEditorField
 
 from organization.models import CourseOrg, Teacher
 
@@ -12,7 +13,8 @@ class Course(models.Model):
     course_org = models.ForeignKey(CourseOrg, verbose_name=u'课程机构', null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name=u'课程名')
     desc = models.TextField(verbose_name=u'课程描述')
-    detail = models.TextField(verbose_name=u'课程详情')
+    detail = UEditorField(width=600, height=300, imagePath="courses/ueditor", filePath="courses/ueditor",
+                          default='', verbose_name=u'课程详情')
     degree = models.CharField(max_length=5, choices=(('cj', u'初级'), ('zj', u'中级'), ('gj', u'高级')), verbose_name=u'难度')
     learn_times = models.IntegerField(default=0, verbose_name=u'学习时长（分钟数）')
     students = models.IntegerField(default=0, verbose_name=u'学习人数')
@@ -24,6 +26,7 @@ class Course(models.Model):
     teacher = models.ForeignKey(Teacher, null=True, blank=True, verbose_name=u'授课讲师')
     need_know = models.CharField(default='', max_length=300, verbose_name=u'课程须知')
     teacher_told_you = models.CharField(default='', max_length=300, verbose_name=u'老师告诉你')
+    is_banner = models.BooleanField(default=False, verbose_name=u'是否为轮播图')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
@@ -46,6 +49,13 @@ class Course(models.Model):
 
     def __str__(self):
         return '{0}'.format(self.name)
+
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = u'轮播课程'
+        verbose_name_plural = verbose_name
+        proxy = True
 
 
 class Lesson(models.Model):

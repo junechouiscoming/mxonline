@@ -19,6 +19,15 @@ class UserProfile(AbstractUser):
         verbose_name = '用户信息'
         verbose_name_plural = verbose_name
 
+    def unread_nums(self):
+        from operation.models import UserMessage
+        user_message = UserMessage()
+        msgs = UserMessage.objects.filter(user=self.id, has_read=False)
+        if msgs:
+            return UserMessage.objects.filter(user=self.id, has_read=user_message.has_read).count()
+        else:
+            return 0
+
     def __str__(self):
         return self.username
 
@@ -26,7 +35,7 @@ class UserProfile(AbstractUser):
 class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name=u'验证码')
     email = models.EmailField(max_length=50, verbose_name=u'邮箱')
-    send_type = models.CharField(max_length=10, choices=(('register', u'注册'), ('forget', u'找回密码')), verbose_name=u'验证码类型')
+    send_type = models.CharField(max_length=30, choices=(('register', u'注册'), ('forget', u'找回密码'), ('sendemail_code', u'发送邮箱验证码')), verbose_name=u'验证码类型')
     send_time = models.DateTimeField(default=datetime.now, verbose_name=u'发送时间')
 
     class Meta:
@@ -40,10 +49,13 @@ class EmailVerifyRecord(models.Model):
 class Banner(models.Model):
     title = models.CharField(max_length=100, verbose_name=u'标题')
     image = models.ImageField(max_length=100, upload_to='banner/%Y/%m', verbose_name=u'轮播图')
-    url = models.URLField(max_length=200, verbose_name=u'访问地址')
+    url = models.URLField(max_length=200, null=True, blank=True, verbose_name=u'访问地址')
     index = models.IntegerField(default=100, verbose_name=u'顺序')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
         verbose_name = u'轮播图'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return '{0}'.format(self.title)

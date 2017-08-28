@@ -62,10 +62,13 @@ var verify = verifyDialogSubmit(
             if(data.email){
                 Dml.fun.showValidateError($('#jsChangeEmail'), data.email);
             }else if(data.status == "success"){
-                Dml.fun.showErrorTips($('#jsChangePhoneTips'), "邮箱信息更新成功");
-                setTimeout(function(){location.reload();},1000);
+                Dml.fun.showTipsDialog({
+                        title:'提交成功',
+                        h2:'修改密码成功，请重新登录!',
+                    });
+                    Dml.fun.winReload();
             }else{
-                 Dml.fun.showValidateError($('#jsChangeEmail'), "邮箱信息更新失败");
+                 Dml.fun.showValidateError($('#jsChangeEmail'));
             }
         },
         complete: function(XMLHttpRequest){
@@ -104,7 +107,7 @@ $(function(){
                     Dml.fun.showValidateError($("#pwd"), data.msg);
                     Dml.fun.showValidateError($("#repwd"), data.msg);
                 }
-            }
+            },
         });
     });
 
@@ -170,11 +173,11 @@ $(function(){
             success: function(data) {
                 if(data.nick_name){
                     _showValidateError($('#nick_name'), data.nick_name);
-                }else if(data.birday){
-                   _showValidateError($('#birth_day'), data.birday);
+                }else if(data.birthday){
+                   _showValidateError($('#birth_day'), data.birthday);
                 }else if(data.address){
                    _showValidateError($('#address'), data.address);
-                }else if(data.status == "failure"){
+                }else if(data.status == "fail"){
                      Dml.fun.showTipsDialog({
                         title: '保存失败',
                         h2: data.msg

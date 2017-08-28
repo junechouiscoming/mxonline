@@ -27,7 +27,7 @@ SECRET_KEY = '%yq30q%z@@#2fo1qf125i9l_*1&8&)25j5&5qbs$52jq_h_shi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'captcha',
     # 分页
     'pure_pagination',
+    # Ueditor
+    'DjangoUeditor'
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -142,6 +144,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+# 在DEBUG=False时，以下设置会失效
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
@@ -150,10 +153,11 @@ STATICFILES_DIRS = [
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_PORT = '465'
 EMAIL_HOST_USER = 'junechouzz@foxmail.com'
-EMAIL_HOST_PASSWORD = 'qooshmfivcbkjade'
+EMAIL_HOST_PASSWORD = 'mtklzitxctbbifce'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_FROM = 'junechouzz@foxmail.com'
 
 MEDIA_URL = '/static/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static\media')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')

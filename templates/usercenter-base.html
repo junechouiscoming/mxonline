@@ -28,34 +28,35 @@
                         
                         <div class="personal">
                             <dl class="user fr">
-                                <dd>bobby<img class="down fr" src="/static/images/top_down.png"/></dd>
-                                <dt><img width="20" height="20" src="/static/media/image/2016/12/default_big_14.png"/></dt>
+                                <dd>{{ request.user.nick_name }}<img class="down fr" src="/static/images/top_down.png"/></dd>
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                             </dl>
                             <div class="userdetail">
                             	<dl>
-	                                <dt><img width="80" height="80" src="/static/media/image/2016/12/default_big_14.png"/></dt>
+	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
 	                                <dd>
-	                                    <h2>django</h2>
-	                                    <p>bobby</p>
+	                                    <h2>{{ request.user.nick_name }}</h2>
 	                                </dd>
                                 </dl>
                                 <div class="btn">
-	                                <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
-	                                <a class="fr" href="/logout/">退出</a>
+	                                <a class="personcenter fl" href="{% url 'users:user_info' %}">进入个人中心</a>
+	                                <a class="fr" href="{% url 'logout' %}">退出</a>
                                 </div>
                             </div>
                         </div>
-                        <a href="usercenter-message.html">
-                            <div class="msg-num"><span id="MsgNum">0</span></div>
+                        <a href="{% url 'users:mymessage' %}">
+{#                            {% ifequal msgs True %}#}
+                            <div class="msg-num"><span id="MsgNum">{{ request.user.unread_nums }}</span></div>
+{#                            {% else %}#}
+{#                            <div class="msg-num"><span id="MsgNum">0</span></div>#}
+{#                            {% endifequal %}#}
                         </a>
-                    
-                    
 				</div>
 			</div>
             
     <div class="middle">
         <div class="wp">
-            <a href="index.html"><img class="fl" src="/static/images/logo2.png"/></a>
+            <a href="{% url 'index' %}"><img class="fl" src="/static/images/logo2.png"/></a>
             <h1>我的慕学网</h1>
         </div>
     </div>
@@ -70,9 +71,7 @@
     <section>
         <div class="wp">
             <ul  class="crumbs">
-                <li><a href="index.html">首页</a>></li>
-                <li><a href="/user/home/">个人中心</a>></li>
-                <li>个人信息</li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
             </ul>
         </div>
     </section>
@@ -82,18 +81,18 @@
 	<div class="wp list personal_list">
 	<div class="left">
         <ul>
-            <li class="active2"><a href="usercenter-info.html">个人资料</a></li>
-            <li ><a href="usercenter-mycourse.html">我的课程</a></li>
-            <li ><a href="usercenter-fav-course.html">我的收藏</a></li>
+            <li class="active2"><a href="{% url 'users:user_info' %}">个人信息</a></li>
+            <li ><a href="{% url 'users:mycourse' %}">我的课程</a></li>
+            <li ><a href="{% url 'users:myfav_org' %}">我的收藏</a></li>
             <li >
-                <a href="usercenter-message.html" style="position: relative;">
+                <a href="{% url 'users:mymessage' %}" style="position: relative;">
                     我的消息
                 </a>
             </li>
         </ul>
 	</div>
 
-    {% block rigth_content %}
+{% block rigth_content %}
     <div class="right">
 		<div class="personal_des ">
 			<div class="head" style="border:1px solid #eaeaea;">
@@ -112,7 +111,6 @@
                                 <input type="file" name="image" id="avatarUp" class="js-img-up"/>
                             </span>
                         </label>
-                        <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />
                     </form>
                     <div style="border-top:1px solid #eaeaea;margin-top:30px;">
                         <a class="button btn-green btn-w100" id="jsUserResetPwd" style="margin:80px auto;width:100px;">修改密码</a>
@@ -152,7 +150,7 @@
 			</div>
 		</div>
 	</div>
-    {% endblock %}
+{% endblock %}
 
 	</div>
 </section>
@@ -210,8 +208,7 @@
                 <div class="button">
                     <input id="jsResetPwdBtn" type="button" value="提交" />
                 </div>
-                <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
-            <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />
+                {% csrf_token %}
             </form>
         </div>
     </div>
@@ -231,8 +228,7 @@
             <div class="button">
                 <input class="changeemai_btn" id="jsChangeEmailBtn" type="button" value="完成"/>
             </div>
-            <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
-        <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />
+            {% csrf_token %}
         </form>
     </div>
 
@@ -316,7 +312,6 @@
     $('.jsDeleteFav_course').on('click', function(){
         var _this = $(this),
             favid = _this.attr('data-favid');
-        alert(favid)
         $.ajax({
                 cache: false,
                 type: "POST",
@@ -324,7 +319,7 @@
                 data: {
                     fav_type: 1,
                     fav_id: favid,
-                    csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 async: true,
                 success: function(data) {
@@ -343,7 +338,7 @@
                     data: {
                         fav_type: 3,
                         fav_id: favid,
-                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     async: true,
                     success: function(data) {
@@ -351,7 +346,6 @@
                     }
                 });
         });
-
 
     $('.jsDeleteFav_org').on('click', function(){
             var _this = $(this),
@@ -363,7 +357,7 @@
                     data: {
                         fav_type: 2,
                         fav_id: favid,
-                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     async: true,
                     success: function(data) {
